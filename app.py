@@ -5,25 +5,22 @@ import openai
 openai.api_key = st.secrets["openai"]["api_key"]
 
 # Функция для загрузки данных из документов
-def load_data():
-    options = ["Налоговое право", "Корпоративное право", "Общие вопросы"]
-    selected_options = st.multiselect("Выберите документы для загрузки:", options)
-    
-    data = {}
-    for option in selected_options:
-        if option == "Налоговое право":
-            with open("FAQ по вопросам налогового права.txt", "r", encoding="cp1251") as f:
-                data[option] = f.read()
-        elif option == "Корпоративное право":
-            with open("FAQ_по_вопросам_корпоративного_права.txt", "r", encoding="cp1251") as f:
-                data[option] = f.read()
-        elif option == "Общие вопросы":
-            with open("Текст обучения.txt", "r", encoding="cp1251") as f:
-                data[option] = f.read()
-    
-    return data
+def load_data(theme):
+    if theme == "Налоговое право":
+        with open("FAQ по вопросам налогового права.txt", "r", encoding="cp1251") as f:
+            return f.read()
+    elif theme == "Корпоративное право":
+        with open("FAQ_по_вопросам_корпоративного_права.txt", "r", encoding="cp1251") as f:
+            return f.read()
+    elif theme == "Общие вопросы":
+        with open("Текст обучения.txt", "r", encoding="cp1251") as f:
+            return f.read()
+    else:
+        return ""
 
 data = load_data()
+
+theme = st.selectbox("Выберите тему вопросов:", ["Налоговое право", "Корпоративное право", "Общие вопросы"])
 
 # Функция для получения ответа от OpenAI GPT
 def get_answer(question, context):
@@ -40,13 +37,11 @@ def get_answer(question, context):
 # Интерфейс Streamlit
 st.title("Legal FAQ Chatbot")
 
-st.write("Этот чат-бот отвечает на вопросы, используя информацию из загруженных документов по налоговому и корпоративному праву.")
+st.write("Этот чат-бот отвечает на вопросы, используя информацию из загруженных документов по выбранной теме.")
 
 question = st.text_input("Введите ваш вопрос:")
 
 if question:
-    context = ""
-    for doc_name, content in data.items():
-        context += content + "\n\n"
+    context = load_data(theme)
     answer = get_answer(question, context)
     st.write("Ответ:", answer)
