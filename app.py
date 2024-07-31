@@ -18,8 +18,6 @@ def load_data(theme):
     else:
         return ""
 
-data = load_data()
-
 theme = st.selectbox("Выберите тему вопросов:", ["Налоговое право", "Корпоративное право", "Общие вопросы"])
 
 # Функция для получения ответа от OpenAI GPT
