@@ -18,8 +18,6 @@ def load_data(theme):
     else:
         return ""
 
-theme = st.selectbox("Выберите тему вопросов:", ["Налоговое право", "Корпоративное право", "Общие вопросы"])
-
 # Функция для получения ответа от OpenAI GPT
 def get_answer(question, context):
     response = openai.chat.completions.create(
@@ -36,6 +34,8 @@ def get_answer(question, context):
 st.title("Legal FAQ Chatbot")
 
 st.write("Этот чат-бот отвечает на вопросы, используя информацию из загруженных документов по выбранной теме.")
+
+theme = st.selectbox("Выберите тему вопросов:", ["Налоговое право", "Корпоративное право", "Общие вопросы"])
 
 question = st.text_input("Введите ваш вопрос:")
 
