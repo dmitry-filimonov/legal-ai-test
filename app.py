@@ -5,16 +5,18 @@ import openai
 openai.api_key = st.secrets["openai"]["api_key"]
 
 # Функция для загрузки данных из документов
-def load_data():
-    with open("FAQ по вопросам налогового права.txt", "r", encoding="cp1251") as f:
-        tax_faq = f.read()
-    with open("FAQ_по_вопросам_корпоративного_права.txt", "r", encoding="cp1251") as f:
-        corp_faq = f.read()
-    with open("Текст обучения.txt", "r", encoding="cp1251") as f:
-        training_text = f.read()
-    return tax_faq, corp_faq, training_text
-
-tax_faq, corp_faq, training_text = load_data()
+def load_data(theme):
+    if theme == "Налоговое право":
+        with open("data/FAQ по вопросам налогового права.txt", "r", encoding="cp1251") as f:
+            return f.read()
+    elif theme == "Корпоративное право":
+        with open("data/FAQ_по_вопросам_корпоративного_права.txt", "r", encoding="cp1251") as f:
+            return f.read()
+    elif theme == "Общие вопросы":
+        with open("data/Текст обучения.txt", "r", encoding="cp1251") as f:
+            return f.read()
+    else:
+        return ""
 
 # Функция для получения ответа от OpenAI GPT
 def get_answer(question, context):
@@ -31,11 +33,13 @@ def get_answer(question, context):
 # Интерфейс Streamlit
 st.title("Legal FAQ Chatbot")
 
-st.write("Этот чат-бот отвечает на вопросы, используя информацию из загруженных документов по налоговому и корпоративному праву.")
+st.write("Этот чат-бот отвечает на вопросы, используя информацию из загруженных документов по выбранной теме.")
+
+theme = st.selectbox("Выберите тему вопросов:", ["Налоговое право", "Корпоративное право", "Общие вопросы"])
 
 question = st.text_input("Введите ваш вопрос:")
 
 if question:
-    context = tax_faq + "\n\n" + corp_faq + "\n\n" + training_text
+    context = load_data(theme)
     answer = get_answer(question, context)
     st.write("Ответ:", answer)
