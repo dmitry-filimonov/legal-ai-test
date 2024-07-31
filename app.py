@@ -7,13 +7,13 @@ openai.api_key = st.secrets["openai"]["api_key"]
 # Функция для загрузки данных из документов
 def load_data(theme):
     if theme == "Налоговое право":
-        with open("FAQ по вопросам налогового права.txt", "r", encoding="cp1251") as f:
+        with open("data/FAQ по вопросам налогового права.txt", "r", encoding="cp1251") as f:
             return f.read()
     elif theme == "Корпоративное право":
-        with open("FAQ_по_вопросам_корпоративного_права.txt", "r", encoding="cp1251") as f:
+        with open("data/FAQ_по_вопросам_корпоративного_права.txt", "r", encoding="cp1251") as f:
             return f.read()
     elif theme == "Общие вопросы":
-        with open("Текст обучения.txt", "r", encoding="cp1251") as f:
+        with open("data/Текст обучения.txt", "r", encoding="cp1251") as f:
             return f.read()
     else:
         return ""
